@@ -10,7 +10,7 @@ const IPCIDR = require('ip-cidr');
  * Calculate and return the first host IP address from a CIDR subnet.
  * @param {string} cidrStr - The IPv4 subnet expressed
  *                 in CIDR format.
- * @param {callback} callback - A callback function.
+ * @param {requstCallback} callback - A callback function.
  * @return {string} (firstIpAddress) - An IPv4 address.
  */
 function getFirstIpAddress(cidrStr, callback) {
@@ -18,6 +18,7 @@ function getFirstIpAddress(cidrStr, callback) {
   // Initialize return arguments for callback
   let firstIpAddress = null;
   let callbackError = null;
+  
 
   // Instantiate an object from the imported class and assign the instance to variable cidr.
   const cidr = new IPCIDR(cidrStr);
@@ -54,7 +55,11 @@ function getIpv4MappedIpv6Address(ipv4) {
 
   // Initialize return argument
   let ipv6Address = null;
-
+  
+  //check if IPv4 is set
+  if(ipv4 === null){
+      return null;
+  }
   // Prepare to derive a Hex version of the dotted-quad decimal IPv4 address.
   // Split the IPv4 address into its four parts.
   let ipv4Quads = ipv4.split('.');
@@ -116,11 +121,12 @@ function main() {
     getFirstIpAddress(sampleCidrs[i], (data, error) => {
       // Now we are inside the callback function.
       // Display the results on the console.
-      let mappedAddress = getIpv4MappedIpv6Address(sampleCidrs[i]);
+      // create new variable to map first ipv4 address to an ipv6 address
+      let mappedAddress = getIpv4MappedIpv6Address(data);
       if (error) {
         console.error(`  Error returned from GET request: ${error}`);
       }
-      console.log(`  Response returned from GET request: {"ipv4":"${data}", "IPv6:${mappedAddress}"}`);
+      console.log(`  Response returned from GET request: {"ipv4":"${data}", "IPv6":"${mappedAddress}"}`);
     });
   }
 
