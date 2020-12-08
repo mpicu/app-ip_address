@@ -55,7 +55,11 @@ function getIpv4MappedIpv6Address(ipv4) {
 
   // Initialize return argument
   let ipv6Address = null;
-
+  
+  //checj if IPv4 is set
+  if(ipv4 === null){
+      return null;
+  }
   // Prepare to derive a Hex version of the dotted-quad decimal IPv4 address.
   // Split the IPv4 address into its four parts.
   let ipv4Quads = ipv4.split('.');
@@ -117,7 +121,7 @@ function main() {
     getFirstIpAddress(sampleCidrs[i], (data, error) => {
       // Now we are inside the callback function.
       // Display the results on the console.
-    var mappedAddress = getIpv4MappedIpv6Address(sampleCidrs[i]);
+      let mappedAddress = getIpv4MappedIpv6Address(data);
       if (error) {
         console.error(`  Error returned from GET request: ${error}`);
       }
