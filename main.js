@@ -6,6 +6,7 @@
   The path module exports an object.
   Assign the imported object to variable path.
 */
+
 const path = require('path');
 
 /**
@@ -13,7 +14,8 @@ const path = require('path');
  * as this module. IAP requires the path object's join method
  * to unequivocally locate the file module.
  */
-const { getIpv4MappedIpv6Address } = require(path.join(__dirname, 'ipv6.js'));
+ 
+ const { getIpv4MappedIpv6Address } = require(path.join(__dirname, 'ipv6.js'));
 
 /*
   Import the ip-cidr npm package.
@@ -44,7 +46,10 @@ class IpAddress {
     getFirstIpAddress(cidrStr, callback) {
 
     // Initialize return arguments for callback
-    let firstIpAddress = null;
+    let firstIpAddress = {
+        ipv4: null,
+        ipv6: null
+    };
     let callbackError = null;
     
 
@@ -65,7 +70,8 @@ class IpAddress {
     } else {
         // If the passed CIDR is valid, call the object's toArray() method.
         // Notice the destructering assignment syntax to get the value of the first array's element.
-        [firstIpAddress] = cidr.toArray(options);
+        [firstIpAddress.ipv4] = cidr.toArray(options);
+        firstIpAddress.ipv6 = getIpv4MappedIpv6Address(firstIpAddress.ipv4);
     }
     // Call the passed callback function.
     // Node.js convention is to pass error data as the first argument to a callback.
